@@ -6,6 +6,7 @@
 .pnp.js
 .venv
 backend/venv/
+frontend/node_modules
 
 # testing
 /coverage
