@@ -1,26 +1,47 @@
 from flask import Flask, request, jsonify
-import requests, bs4
-import lxml #faster parser than lxml
+from flask_cors import CORS
+from scraper.scraper import scrape
+from scraper.database import save_to_db, get_from_db
+from scraper.config import SCRAPE_URLS
 
 app = Flask(__name__)
+CORS(app, origins="*" )
 
-@app.route('/api/search')
-def home():
-    data = request.get_json()  # Parse JSON from the frontend
-    print(f"Received data: {data}")
-    return jsonify({'message': 'Data received', 'received_data': data})
+""" client = MongoClient('localhost', 27017)
+
+db = client.netComponents_db
+netComponents = db.netComponents """
+
+def run_scraper(searchQuery):
+    isAlreadyInDB = check_in_db(searchQuery)
+    if (isAlreadyInDB == True):
+        get_from_db(searchQuery)
+    else:
+        for url in SCRAPE_URLS:
+            data = scrape(url, searchQuery)
+            #save_to_db(data)
+    return data
+
+
+def check_in_db(search):
+    #if in db return true -> get straight from fb
+    #if not in db return false -> scrape
+    print(search)
+    return False
+
+@app.route('/api/search', methods=['GET'])
+def search():
+    searchQuery = request.args.get('q')
+    print(f"Received search query: {searchQuery}")
+    data = run_scraper(searchQuery)
+
+    results = {
+        "searchQuery": searchQuery,
+        "data": data
+        }
+    return jsonify(results)
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8000)
 
 
-""" @app.route('/search')
-def search(searchTerm):
-    res = requests.get('https://www.netcomponents.com/demo/result?pn1=' + searchTerm)
-    try:
-        res.raise_for_status()
-    except Exception as exc:
-        print('There was a problem: $s' % (exc))
-    yummySoup = bs4.BeautifulSoup(res.text, 'lxml')
-    rowElems = yummySoup.select('tr')
-    jsonResult = 'blah'
-    return jsonResult """
