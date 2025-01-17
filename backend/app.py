@@ -5,7 +5,7 @@ from scraper.database import save_to_db, get_from_db
 from scraper.config import SCRAPE_URLS
 
 app = Flask(__name__)
-CORS(app, origins="*" )
+CORS(app, origins="https://net-component-scraper.vercel.app")
 
 """ client = MongoClient('localhost', 27017)
 
