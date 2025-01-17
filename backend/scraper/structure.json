@@ -1,0 +1,9 @@
+[
+  {
+    "name": "findchips",
+    "productSelector": "tr",
+    "manufacturerSelector": "td.td-mfg",
+    "stockSelector": "td.td-stock",
+    "priceSelector": "td.td-price-range"
+  }
+]
