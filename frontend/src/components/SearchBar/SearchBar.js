@@ -37,7 +37,6 @@ export const SearchBar = ({
   const getSearchResult = async () => {
     try {
       const response = await fetch(
-        // `http://localhost:8000/api/search?q=${searchQuery}`,
         `https://net-component-scraper.onrender.com/api/search?q=${searchQuery}`,
         {
           method: "GET",
