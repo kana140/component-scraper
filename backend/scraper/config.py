@@ -1,5 +1,5 @@
 SCRAPE_URLS = [
-        #"https://www.findchips.com/search/",
+        "https://www.findchips.com/search/",
         "https://octopart.com/search?q="
 ]
 

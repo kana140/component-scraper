@@ -20,22 +20,33 @@ def scrape(url, searchQuery):
         res.raise_for_status()
     except Exception as exc:
         print('There was a problem: $s' % (exc))
-    #for findchips
-    # yummySoup = bs4.BeautifulSoup(res.text, 'lxml')
-    # rowElems = yummySoup.find_all('tr', class_='row')
-    # jsonResult = []
-    # for i in rowElems:
-    #     manufacturer = i.select('td.td-mfg')[0].get_text(strip=True)
-    #     stock = i.select('td.td-stock')[0].get_text(strip=True)
-    #     price = i.select('td.td-price-range')[0].get_text(strip=True)
-    #     jsonResult.append({
-    #     "manufacturer": manufacturer,
-    #     "stock": stock,
-    #     "price": price
-    #     })
+    
+    match url:
+        case "https://www.findchips.com/search/":
+            jsonResult = scrape_findchips(res)
+        case "https://octopart.com/search?q=":
+            jsonResult = scrape_octopart(res)
+    return jsonResult
 
-    #for octopart
-    yummySoup = bs4.BeautifulSoup(res.text, 'lxml')
+
+def scrape_findchips(data):
+    yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
+    rowElems = yummySoup.find_all('tr', class_='row')
+    jsonResult = []
+    for i in rowElems:
+        manufacturer = i.select('td.td-mfg')[0].get_text(strip=True)
+        stock = i.select('td.td-stock')[0].get_text(strip=True)
+        price = i.select('td.td-price-range')[0].get_text(strip=True)
+        jsonResult.append({
+        "manufacturer": manufacturer,
+        "stock": stock,
+        "price": price,
+        "website": "FindChips",
+        })
+    return jsonResult
+
+def scrape_octopart(data):
+    yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
     rowElems = yummySoup.find_all('tr', attrs={'data-testid':'offer-row'})
     jsonResult = []
     for i in rowElems:
@@ -47,10 +58,11 @@ def scrape(url, searchQuery):
         "distributor": distributor,
         "stock": stock,
         "price": price,
-        "link": link
+        "link": link,
+        "website": "Octopart",
         })
-    print(jsonResult)
     return jsonResult
+
 
 def send_email(subject, body, to_email):
     email = EmailMessage()
@@ -62,4 +74,3 @@ def send_email(subject, body, to_email):
     with smtplib.SMTP_SSL('smtp.example.com', 465) as smtp:
         smtp.login("your-email@example.com", "your-password")
         smtp.send_message(email)
-

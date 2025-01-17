@@ -17,9 +17,11 @@ def run_scraper(searchQuery):
     if (isAlreadyInDB == True):
         get_from_db(searchQuery)
     else:
+        data = []
         for url in SCRAPE_URLS:
-            data = scrape(url, searchQuery)
+            data = data + scrape(url, searchQuery)
             #save_to_db(data)
+    print(data)
     return data
 
 
