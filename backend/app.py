@@ -26,7 +26,7 @@ def run_scraper(searchQuery):
             data[websiteName]["products"] = list(result.values())[0]
             data[websiteName]["websiteLink"] = url + searchQuery 
             #save_to_db(data)
-    print(data)
+    # print(data)
     return data
 
 

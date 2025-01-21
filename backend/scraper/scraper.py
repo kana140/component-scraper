@@ -27,6 +27,8 @@ def scrape(url, searchQuery):
             jsonResult = scrape_findchips(res)
         case "https://octopart.com/search?q=":
             jsonResult = scrape_octopart(res)
+        case "https://www.icsource.com/Home/SampleSearch.aspx?part=":
+            jsonResult = scrape_icsource(res)
     jsonResult = clean_data(jsonResult)
     return jsonResult
 
@@ -35,6 +37,26 @@ def clean_data(data):
 
     return data
 
+
+def scrape_icsource(data):
+    yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
+    jsonResult = []
+    partElems = yummySoup.find_all('tr', class_='rgRow')
+    for part in partElems:
+        cells = part.find_all("td")
+        # manufacturer = .selpartect('td.td-mfg')[0].get_text(strip=True)
+        # stock = part.select('td.td-stock')[0].get_text(strip=True)
+        # price = part.select('td.td-price-range')[0].get_text(strip=True)
+        jsonResult.append({
+        "Part Number": cells[0].get_text(strip=True),
+        "manufacturer": cells[1].get_text(strip=True),
+        "Year": cells[2].get_text(strip=True),
+        "stock": cells[3].get_text(strip=True),
+        # "Details Link": cells[4].find("a")["href"] if cells[4].find("a") else None,
+        })
+    icsourceJSON = {}
+    icsourceJSON["ICSource.com"] = jsonResult
+    return icsourceJSON
 
 def scrape_findchips(data):
     yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
