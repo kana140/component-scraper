@@ -3,7 +3,7 @@ import lxml #faster parser than lxml
 import smtplib
 from email.message import EmailMessage
 from scraper.config import USER_AGENTS
-from scraper.config import EMAILS
+# from scraper.config import EMAILS
 import random
 
 def scrape(url, searchQuery):
