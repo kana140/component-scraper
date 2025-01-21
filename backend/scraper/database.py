@@ -1,7 +1,9 @@
 from pymongo import MongoClient
 from datetime import datetime
+from scraper.config import DB_URI
+import certifi
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(DB_URI, tlsCAFile=certifi.where())
 db = client['componentsDB']
 collection = db['components_data']
 
@@ -25,3 +27,14 @@ def save_to_db(data):
     data['timestamp'] = datetime.now()
     collection.insert_one(data)
     print(f"Data saved for {data['url']}")
+
+def check_in_db(search):
+    #if in db return true -> get straight from fb
+    #if not in db return false -> scrape
+    # collection_data = collection.find()
+    # print("retrieving items from database collection")
+    # for item in collection_data:
+    #     print("item: " + item)
+    # print("retrieval complete")
+    print(search)
+    return False

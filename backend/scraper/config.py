@@ -13,6 +13,11 @@ USER_AGENTS = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15'
 ]
 
-DB_URI = "mongodb://localhost:27017/"
+# DB_URI = "mongodb://localhost:27017/"
+DB_URI = "mongodb+srv://keitelwinslet:R8Q7ajJxT9COeQIQ@net-components.kcrfz.mongodb.net/?retryWrites=true&w=majority&appName=net-components"
 DB_NAME = "netComponentsDB"
+DB_USER = ""
+DB_PASSWORD = ""
 
+
+# EMAILS = ["keitelwinslet@gmail.com"]
