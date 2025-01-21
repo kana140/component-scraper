@@ -27,7 +27,6 @@ def scrape(url, searchQuery):
             jsonResult = scrape_findchips(res)
         case "https://octopart.com/search?q=":
             jsonResult = scrape_octopart(res)
-
     jsonResult = clean_data(jsonResult)
     return jsonResult
 
@@ -56,22 +55,31 @@ def scrape_findchips(data):
 
 def scrape_octopart(data):
     yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
-    rowElems = yummySoup.find_all('tr', attrs={'data-testid':'offer-row'})
+    # rowElems = yummySoup.find_all('tr', attrs={'data-testid':'offer-row'})
+    partElems = yummySoup.find_all('div', attrs={'data-sentry-component':'Part'})
     jsonResult = []
-    for i in rowElems:
-        distributor = i.select_one('[data-sentry-component="Distributor"]').get_text(strip=True)
-        stock = i.select_one('[data-sentry-component="Stock"]').get_text(strip=True)
-        price = i.select_one('[data-sentry-component="PriceAtQty"]').get_text(strip=True)
-        link = i.select_one('[data-sentry-component="Sku"]').find('a')['href']
-        jsonResult.append({
-        "distributor": distributor,
-        "stock": stock,
-        "price": price,
-        "link": link
-        })
+    for part in partElems:
+        offers = part.find_all('tr', attrs={'data-testid':'offer-row'})
+        if (len(offers) != 0):
+            manufacturer = part.select_one('[data-testid="serp-part-header-manufacturer"]').get_text(strip=True)
+            for offer in offers:
+                distributor = offer.select_one('[data-sentry-component="Distributor"]').get_text(strip=True)
+                stock = offer.select_one('[data-sentry-component="Stock"]').get_text(strip=True)
+                price = offer.select_one('[data-sentry-component="PriceAtQty"]').get_text(strip=True)
+                link = offer.select_one('[data-sentry-component="Sku"]').find('a')['href']
+                jsonResult.append({
+                "distributor": distributor,
+                "stock": stock,
+                "price": price,
+                "link": link,
+                "manufacturer": manufacturer
+                })
+
+    
     octopartJSON = {}
     octopartJSON["Octopart.com"] = jsonResult
     return octopartJSON
+
 
 
 def send_email(subject, body):
