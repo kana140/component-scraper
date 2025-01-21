@@ -21,8 +21,12 @@ def run_scraper(searchQuery):
         for url in SCRAPE_URLS:
             # data.append(scrape(url, searchQuery))
             result = scrape(url, searchQuery)
-            data[list(result.keys())[0]] = list(result.values())[0]
+            websiteName = list(result.keys())[0]
+            data[websiteName] = {}
+            data[websiteName]["products"] = list(result.values())[0]
+            data[websiteName]["websiteLink"] = url + searchQuery 
             #save_to_db(data)
+    print(data)
     return data
 
 

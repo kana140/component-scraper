@@ -32,11 +32,17 @@ export const ProductResult = ({ products, isLoading }) => {
             <Accordion key={siteName}>
               <AccordionSummary>
                 <Typography>
-                  {siteData.length} products found from {siteName}
+                  <a
+                    href={siteData.websiteLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {siteData.products.length} products found from {siteName}
+                  </a>
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <ProductsTable products={siteData}></ProductsTable>
+                <ProductsTable products={siteData.products}></ProductsTable>
               </AccordionDetails>
             </Accordion>
           ))}
