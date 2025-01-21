@@ -3,6 +3,7 @@ import lxml #faster parser than lxml
 import smtplib
 from email.message import EmailMessage
 from scraper.config import USER_AGENTS
+from scraper.config import EMAILS
 import random
 
 def scrape(url, searchQuery):
@@ -26,7 +27,14 @@ def scrape(url, searchQuery):
             jsonResult = scrape_findchips(res)
         case "https://octopart.com/search?q=":
             jsonResult = scrape_octopart(res)
+
+    jsonResult = clean_data(jsonResult)
     return jsonResult
+
+
+def clean_data(data):
+
+    return data
 
 
 def scrape_findchips(data):
@@ -40,10 +48,11 @@ def scrape_findchips(data):
         jsonResult.append({
         "manufacturer": manufacturer,
         "stock": stock,
-        "price": price,
-        "website": "FindChips",
+        "price": price
         })
-    return jsonResult
+    findChipsJSON = {}
+    findChipsJSON["Findchips.com"] = jsonResult
+    return findChipsJSON
 
 def scrape_octopart(data):
     yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
@@ -58,19 +67,22 @@ def scrape_octopart(data):
         "distributor": distributor,
         "stock": stock,
         "price": price,
-        "link": link,
-        "website": "Octopart",
+        "link": link
         })
-    return jsonResult
+    octopartJSON = {}
+    octopartJSON["Octopart.com"] = jsonResult
+    return octopartJSON
 
 
-def send_email(subject, body, to_email):
-    email = EmailMessage()
-    email['Subject'] = subject
-    email['From'] = "your-email@example.com"
-    email['To'] = to_email
-    email.set_content(body)
+def send_email(subject, body):
+    for recipient in EMAILS:
+        email = EmailMessage()
+        email['Subject'] = subject
+        email['From'] = "your-email@example.com"
+        email['To'] = recipient
+        email.set_content(body)
 
-    with smtplib.SMTP_SSL('smtp.example.com', 465) as smtp:
-        smtp.login("your-email@example.com", "your-password")
-        smtp.send_message(email)
+        with smtplib.SMTP_SSL('smtp.example.com', 465) as smtp:
+            smtp.login("your-email@example.com", "your-password")
+            smtp.send_message(email)
+

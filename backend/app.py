@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from scraper.scraper import scrape
-from scraper.database import save_to_db, get_from_db
+from scraper.database import save_to_db, get_from_db, check_in_db
 from scraper.config import SCRAPE_URLS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://net-component-scraper.vercel.app"}})
+CORS(app, resources={r"/*": {"origins": ["https://net-component-scraper.vercel.app", "http://localhost:3000"]}})
 
 """ client = MongoClient('localhost', 27017)
 
@@ -17,19 +17,14 @@ def run_scraper(searchQuery):
     if (isAlreadyInDB == True):
         get_from_db(searchQuery)
     else:
-        data = []
+        data = {}
         for url in SCRAPE_URLS:
-            data = data + scrape(url, searchQuery)
+            # data.append(scrape(url, searchQuery))
+            result = scrape(url, searchQuery)
+            data[list(result.keys())[0]] = list(result.values())[0]
             #save_to_db(data)
-    print(data)
     return data
 
-
-def check_in_db(search):
-    #if in db return true -> get straight from fb
-    #if not in db return false -> scrape
-    print(search)
-    return False
 
 @app.route('/api/search', methods=['GET'])
 def search():
