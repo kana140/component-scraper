@@ -28,19 +28,24 @@ function App() {
   } */
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div className="App">
       <header className="App-header">
         <Typography variant="h1">E-Component Scraper</Typography>
       </header>
-      <p> Scrapes websites such as net component, blah, blah, blah</p>
+      {/* <p> Scrapes websites such as net component, blah, blah, blah</p> */}
       <SearchBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         setSearchResult={setSearchResult}
+        setIsLoading={setIsLoading}
       ></SearchBar>
-      <ProductResult products={searchResult}></ProductResult>
+      <ProductResult
+        products={searchResult}
+        isLoading={isLoading}
+      ></ProductResult>
     </div>
   );
 }

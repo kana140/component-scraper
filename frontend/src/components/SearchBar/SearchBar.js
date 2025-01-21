@@ -10,6 +10,7 @@ import {
   MenuItem,
   SvgIcon,
   IconButton,
+  Input,
 } from "@mui/material";
 import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -33,19 +34,20 @@ export const SearchBar = ({
   onClick,
   setSearchQuery,
   setSearchResult,
+  setIsLoading,
 }) => {
   const getSearchResult = async () => {
     try {
-      const response = await fetch(
-        `https://net-component-scraper.onrender.com/api/search?q=${searchQuery}`,
-        {
-          method: "GET",
-        }
-      );
+      setIsLoading(true);
+      const apiURL = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${apiURL}/api/search?q=${searchQuery}`, {
+        method: "GET",
+      });
 
       const data = await response.json();
       setSearchResult(data.data);
       console.log("Response from backend:", data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error sending data:", error);
     }
@@ -54,9 +56,10 @@ export const SearchBar = ({
   return (
     <Box className="search-bar" display="flex" alignItems="center">
       <Box flex="1" display="flex" alignItems="center">
-        <TextField
+        <Input
           className="text-area"
-          defaultValue="Part No. TH8056KDC-AAA-014-RE..."
+          placeholder="Enter SKU to search for products"
+          disableUnderline
           onInput={(e) => {
             setSearchQuery(e.target.value);
           }}
