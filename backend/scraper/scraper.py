@@ -2,7 +2,7 @@ import requests, bs4
 import lxml #faster parser than lxml
 import smtplib
 from email.message import EmailMessage
-from scraper.config import USER_AGENTS
+from scraper.config import USER_AGENTS, SCRAPE_URLS
 # from scraper.config import EMAILS
 import random
 import re
@@ -10,8 +10,7 @@ import re
 # TO DO:
 # refactor scraping code for modularity
 
-def scrape(url, searchQuery):
-    print(url + searchQuery)
+def scrape(searchQuery):
     try:
         headers = {
                 "authority": "www.google.com",
@@ -21,27 +20,30 @@ def scrape(url, searchQuery):
     "Content-Type": "application/json",
     "User-Agent": random.choice(USER_AGENTS)
 }
-        res = requests.get(url + searchQuery, headers=headers) 
-        res.raise_for_status()
+        data = {}
+        for key, value in SCRAPE_URLS.items():
+            url = value[0]
+            scrape_function = globals().get(value[1])
+            try:
+                res = requests.get(url + searchQuery, headers=headers)
+                res.raise_for_status() 
+            except: 
+                print("scraping failed for:", key)
+            finally:
+                yummySoup = bs4.BeautifulSoup(res.text, 'lxml')
+                jsonResult = scrape_function(yummySoup)
+                jsonResult = clean_data(jsonResult)
+                data[key] = {}
+                data[key]["products"] = list(jsonResult.values())[0]
+                data[key]["websiteLink"] = url + searchQuery 
     except Exception as exc:
         print('There was a problem: $s' % (exc))
-    #this really bad cause it means that if the search url has a url in the config.py then an error is thrown :| BAD BAD BAD
-    match url:
-        case "https://www.findchips.com/search/":
-            jsonResult = scrape_findchips(res)
-        case "https://octopart.com/search?q=":
-            jsonResult = scrape_octopart(res)
-        case "https://www.icsource.com/Home/SampleSearch.aspx?part=":
-            jsonResult = scrape_icsource(res)
-        case "https://www.oemstrade.com/search/":
-            jsonResult = scrape_oemtrade(res)
-    jsonResult = clean_data(jsonResult)
-    return jsonResult
+    return data
 
 
 def clean_data(data):
     filteredData = []
-    # Removes data with 0 stock
+    # Removes data with 0 stock and removes non numerical characters 
     dictKey = list(data.keys())[0]
     items = data[dictKey]
     for part in items:
@@ -55,78 +57,29 @@ def clean_data(data):
 
 
 def scrape_oemtrade(data):
-    yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
     jsonResult = []
-    partElems = yummySoup.find_all('div', class_='distributor-results')
+    partElems = data.find_all('div', class_='distributor-results')
     for part in partElems:
         offers = part.find_all("tr", class_="row")
-        for offer in offers:
-            distributor = part.find('h2', class_='distributor-title').get_text(strip=True)
-            manufacturer = offer.find('td', class_='td-distributor-name').get_text(strip=True)
-            stock = offer.find('td', class_='td-stock').get_text(strip=True)
-            price = offer.find('td', class_="td-price").get_text(strip=True)
-            jsonResult.append({
-            "distributor": distributor,
-            "manufacturer": manufacturer,
-            "stock": stock,
-            "price": price
-            })
+        if (len(offers) != 0):
+            for offer in offers:
+                distributor = part.find('h2', class_='distributor-title').get_text(strip=True)
+                manufacturer = offer.find('td', class_='td-distributor-name').get_text(strip=True)
+                stock = offer.find('td', class_='td-stock').get_text(strip=True)
+                price = offer.find('td', class_="td-price").get_text(strip=True)
+                jsonResult.append({
+                "distributor": distributor,
+                "manufacturer": manufacturer,
+                "stock": stock,
+                "price": price
+                })
     oemsTrade = {}
     oemsTrade["oemstrade.com"] = jsonResult
     return oemsTrade
 
-#not implemented, need selenium or something
-# data rendered using javascript, need to scrape from the api call instead
-# put this separately into function that scrapes via api call 
-def scrape_oemsecrets(data): 
-
-    oemsecretsJSON = {}
-    oemsecretsJSON["oemsecrets.com"] = jsonResult
-    return oemsecretsJSON
-
-
-def scrape_icsource(data):
-    yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
-    jsonResult = []
-    partElems = yummySoup.find_all('tr', class_='rgRow')
-    for part in partElems:
-        cells = part.find_all("td")
-        # manufacturer = .selpartect('td.td-mfg')[0].get_text(strip=True)
-        # stock = part.select('td.td-stock')[0].get_text(strip=True)
-        # price = part.select('td.td-price-range')[0].get_text(strip=True)
-        jsonResult.append({
-        "Part Number": cells[0].get_text(strip=True),
-        "manufacturer": cells[1].get_text(strip=True),
-        "year": cells[2].get_text(strip=True),
-        "stock": cells[3].get_text(strip=True),
-        # "Details Link": cells[4].find("a")["href"] if cells[4].find("a") else None,
-        })
-    icsourceJSON = {}
-    icsourceJSON["ICSource.com"] = jsonResult
-    return icsourceJSON
-
-def scrape_findchips(data):
-    yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
-    rowElems = yummySoup.find_all('tr', class_='row')
-    jsonResult = []
-    for i in rowElems:
-        manufacturer = i.select('td.td-mfg')[0].get_text(strip=True)
-        stock = i.select('td.td-stock')[0].get_text(strip=True)
-        price = i.select('td.td-price-range')[0].get_text(strip=True)
-        jsonResult.append({
-        "manufacturer": manufacturer,
-        "stock": stock,
-        "price": price
-        })
-    findChipsJSON = {}
-    findChipsJSON["Findchips.com"] = jsonResult
-    return findChipsJSON
-
 def scrape_octopart(data):
-    yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
-    # rowElems = yummySoup.find_all('tr', attrs={'data-testid':'offer-row'})
-    partElems = yummySoup.find_all('div', attrs={'data-sentry-component':'Part'})
     jsonResult = []
+    partElems = data.find_all('div', attrs={'data-sentry-component':'Part'})
     for part in partElems:
         offers = part.find_all('tr', attrs={'data-testid':'offer-row'})
         if (len(offers) != 0):
@@ -146,6 +99,39 @@ def scrape_octopart(data):
     octopartJSON = {}
     octopartJSON["Octopart.com"] = jsonResult
     return octopartJSON
+
+
+
+def scrape_icsource(data):
+    jsonResult = []
+    partElems = data.find_all('tr', class_='rgRow')
+    for part in partElems:
+        cells = part.find_all("td")
+        jsonResult.append({
+        "Part Number": cells[0].get_text(strip=True),
+        "manufacturer": cells[1].get_text(strip=True),
+        "year": cells[2].get_text(strip=True),
+        "stock": cells[3].get_text(strip=True),
+        })
+    icsourceJSON = {}
+    icsourceJSON["ICSource.com"] = jsonResult
+    return icsourceJSON
+
+def scrape_findchips(data):
+    rowElems = data.find_all('tr', class_='row')
+    jsonResult = []
+    for i in rowElems:
+        manufacturer = i.select('td.td-mfg')[0].get_text(strip=True)
+        stock = i.select('td.td-stock')[0].get_text(strip=True)
+        price = i.select('td.td-price-range')[0].get_text(strip=True)
+        jsonResult.append({
+        "manufacturer": manufacturer,
+        "stock": stock,
+        "price": price
+        })
+    findChipsJSON = {}
+    findChipsJSON["Findchips.com"] = jsonResult
+    return findChipsJSON
 
 
 

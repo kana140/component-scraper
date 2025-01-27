@@ -12,31 +12,17 @@ import {
   IconButton,
   Input,
 } from "@mui/material";
-import { useState } from "react";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
-
-/* const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 200,
-    },
-  },
-}; */
 
 export const SearchBar = ({
   searchQuery,
-  selectedFilter,
-  onSearch,
-  onClick,
   setSearchQuery,
   setSearchResult,
   setIsLoading,
 }) => {
   const getSearchResult = async () => {
+    // implement handler if search query is empty
+    // maybe animation to get them to fill in the empty field
     try {
       setIsLoading(true);
       const apiURL = process.env.REACT_APP_API_URL;

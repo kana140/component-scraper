@@ -1,10 +1,10 @@
-SCRAPE_URLS = [
-        "https://www.findchips.com/search/",
-        "https://octopart.com/search?q=",
-        "https://www.icsource.com/Home/SampleSearch.aspx?part=",
-        "https://www.oemstrade.com/search/"
+SCRAPE_URLS = {
+        "findChips.com" : ["https://www.findchips.com/search/", "scrape_findchips"], 
+        "Octopart.com" : ["https://octopart.com/search?q=", "scrape_octopart"],
+        "ICSource.com": ["https://www.icsource.com/Home/SampleSearch.aspx?part=", "scrape_icsource"],
+        "oemsTrade.com": ["https://www.oemstrade.com/search/", "scrape_oemtrade"]
 
-]
+}
 
 USER_AGENTS = [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
