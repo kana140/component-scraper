@@ -7,6 +7,9 @@ from scraper.config import USER_AGENTS
 import random
 import re
 
+# TO DO:
+# refactor scraping code for modularity
+
 def scrape(url, searchQuery):
     print(url + searchQuery)
     try:
@@ -22,7 +25,7 @@ def scrape(url, searchQuery):
         res.raise_for_status()
     except Exception as exc:
         print('There was a problem: $s' % (exc))
-    
+    #this really bad cause it means that if the search url has a url in the config.py then an error is thrown :| BAD BAD BAD
     match url:
         case "https://www.findchips.com/search/":
             jsonResult = scrape_findchips(res)
@@ -30,15 +33,15 @@ def scrape(url, searchQuery):
             jsonResult = scrape_octopart(res)
         case "https://www.icsource.com/Home/SampleSearch.aspx?part=":
             jsonResult = scrape_icsource(res)
-        # case "https://www.oemsecrets.com/compare/":
-        #     jsonResult = scrape_oemsecrets(res)
+        case "https://www.oemstrade.com/search/":
+            jsonResult = scrape_oemtrade(res)
     jsonResult = clean_data(jsonResult)
     return jsonResult
 
 
 def clean_data(data):
     filteredData = []
-    #remove data with 0 stock
+    # Removes data with 0 stock
     dictKey = list(data.keys())[0]
     items = data[dictKey]
     for part in items:
@@ -50,25 +53,36 @@ def clean_data(data):
     data[dictKey] = filteredData
     return data
 
-def scrape_oemsecrets(data): 
+
+def scrape_oemtrade(data):
     yummySoup = bs4.BeautifulSoup(data.text, 'lxml')
     jsonResult = []
-    partElems = yummySoup.find_all('tr', class_='rgRow')
+    partElems = yummySoup.find_all('div', class_='distributor-results')
     for part in partElems:
-        cells = part.find_all("td")
-        # manufacturer = .selpartect('td.td-mfg')[0].get_text(strip=True)
-        # stock = part.select('td.td-stock')[0].get_text(strip=True)
-        # price = part.select('td.td-price-range')[0].get_text(strip=True)
-        jsonResult.append({
-        "Part Number": cells[0].get_text(strip=True),
-        "manufacturer": cells[1].get_text(strip=True),
-        "Year": cells[2].get_text(strip=True),
-        "stock": cells[3].get_text(strip=True),
-        # "Details Link": cells[4].find("a")["href"] if cells[4].find("a") else None,
-        })
-    icsourceJSON = {}
-    icsourceJSON["ICSource.com"] = jsonResult
-    return icsourceJSON
+        offers = part.find_all("tr", class_="row")
+        for offer in offers:
+            distributor = part.find('h2', class_='distributor-title').get_text(strip=True)
+            manufacturer = offer.find('td', class_='td-distributor-name').get_text(strip=True)
+            stock = offer.find('td', class_='td-stock').get_text(strip=True)
+            price = offer.find('td', class_="td-price").get_text(strip=True)
+            jsonResult.append({
+            "distributor": distributor,
+            "manufacturer": manufacturer,
+            "stock": stock,
+            "price": price
+            })
+    oemsTrade = {}
+    oemsTrade["oemstrade.com"] = jsonResult
+    return oemsTrade
+
+#not implemented, need selenium or something
+# data rendered using javascript, need to scrape from the api call instead
+# put this separately into function that scrapes via api call 
+def scrape_oemsecrets(data): 
+
+    oemsecretsJSON = {}
+    oemsecretsJSON["oemsecrets.com"] = jsonResult
+    return oemsecretsJSON
 
 
 def scrape_icsource(data):
@@ -83,7 +97,7 @@ def scrape_icsource(data):
         jsonResult.append({
         "Part Number": cells[0].get_text(strip=True),
         "manufacturer": cells[1].get_text(strip=True),
-        "Year": cells[2].get_text(strip=True),
+        "year": cells[2].get_text(strip=True),
         "stock": cells[3].get_text(strip=True),
         # "Details Link": cells[4].find("a")["href"] if cells[4].find("a") else None,
         })
@@ -129,8 +143,6 @@ def scrape_octopart(data):
                 "link": link,
                 "manufacturer": manufacturer
                 })
-
-    
     octopartJSON = {}
     octopartJSON["Octopart.com"] = jsonResult
     return octopartJSON
