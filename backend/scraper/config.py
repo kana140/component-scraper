@@ -2,8 +2,7 @@ SCRAPE_URLS = [
         "https://www.findchips.com/search/",
         "https://octopart.com/search?q=",
         "https://www.icsource.com/Home/SampleSearch.aspx?part=",
-        # "https://www.oemsecrets.com/compare/TMH0505S",
-        # "https://www.oemstrade.com/"
+        "https://www.oemstrade.com/search/"
 
 ]
 
