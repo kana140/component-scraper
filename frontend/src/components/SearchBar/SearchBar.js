@@ -1,17 +1,5 @@
 import "./SearchBar.css";
-import {
-  Typography,
-  Box,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  SvgIcon,
-  IconButton,
-  Input,
-} from "@mui/material";
+import { Box, IconButton, Input } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 export const SearchBar = ({

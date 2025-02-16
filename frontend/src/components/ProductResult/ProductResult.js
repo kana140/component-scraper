@@ -36,6 +36,7 @@ export const ProductResult = ({ products, isLoading }) => {
                     href={siteData.websiteLink}
                     target="_blank"
                     rel="noopener noreferrer"
+                    sx={{ color: "#14B8A6" }}
                   >
                     {siteData.products.length} products found from {siteName}
                   </a>

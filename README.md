@@ -1,73 +1,179 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
 scraper python 3, beautiful soup
 scraper rotates user agents from USER_AGENTS in config.py file
+
+- connected to database
+- data saved with SKU/name of product and date it was scraped "TH8056KDC-AAA-014-RE_18-01-25"
+- every time search is made, check database if SKU is already in there and if the current date being searched is greater than the date of the data saved
+
+Component Scraper Website
+
+A modular web scraping tool designed for retrieving component information from various distributor websites, cleaning the data, and presenting it in a structured format.
+
+Table of Contents
+
+About the Project
+
+Features
+
+Installation
+
+Usage
+
+Configuration
+
+Technologies Used
+
+Contributing
+
+License
+
+Contact
+
+About the Project
+
+The Component Scraper Website is a scraping solution that extracts real-time stock, pricing, and distributor data for electronic components. Designed for flexibility and ease of use, it supports multiple distributor sites by utilizing reusable scraping configurations.
+
+Why This Project?
+
+- Streamline component data aggregation for manufacturers and hobbyists.
+
+- Enable seamless integration of scraped data into inventory management systems.
+
+- Demonstrate modular scraping with Python and BeautifulSoup.
+
+Features
+
+- Modular scraping functions with configurable CSS selectors for multiple websites.
+
+- Automated cleaning of scraped data (e.g., removing zero-stock items).
+
+- Flexible support for adding new distributor websites.
+
+- Optimized for error handling and debugging.
+
+Installation
+
+Clone the repository:
+
+git clone https://github.com/kana140/component-scraper.git
+
+Navigate to the project directory:
+
+cd component-scraper\backend
+
+Install required dependencies:
+
+pip install -r requirements.txt
+
+Add user agents and other configurations to config.py.
+
+Usage
+
+To scrape data, use the following command:
+
+python app.py
+
+The results will be cleaned and saved in JSON format.
+
+Example Output
+{
+"data": {
+"ICSource.com": {
+"products": [
+{
+"Part Number": "TH8056KDC-AAA-014-RE",
+"manufacturer": "MELEXIS",
+"stock": "760912",
+"year": "21+"
+}
+],
+"websiteLink": "https://www.icsource.com/Home/SampleSearch.aspx?part=TH8056KDC-AAA-014-RE"
+},
+"Octopart.com": {
+"products": [
+{
+"distributor": "DigiKey",
+"link": "https://octopart.com/opatz8j6/a1?t=AszL1gb0e8ESP6D4fdex1nBEzs0P0bEvmZaJDSrYoF_RZg8zVcFXRKXmbGwpd_YJpNgDg2vfB9txvfrkWDbM3kC3SmQzZR44uVn2-0M3QXuuNF8IwE5uW_W7yrmTB_s20S3UQHZY257c3UIFc51pNilob5-i68CyZuB4Xtf6PezgEcBb0LZrvU00G2I037NwGJkvqgALaQqK4Mlfrop0O41iqnBGQ-2mX8_hhIH0GU8ss_JIu0ocYjxI0k1BKiKbf1JSUuGO1K1fGhZRMh7vEw",
+"manufacturer": "Melexis",
+"price": "1.970",
+"stock": "14591"
+}
+],
+"websiteLink": "https://octopart.com/search?q=TH8056KDC-AAA-014-RE"
+},
+"findChips.com": {
+"products": [
+{
+"manufacturer": "Melexis Microelectronic Integrated Systems",
+"price": "$0.9704 / $1.9700",
+"stock": "14591"
+}
+],
+"websiteLink": "https://www.findchips.com/search/TH8056KDC-AAA-014-RE"
+},
+"oemsTrade.com": {
+"products": [
+{
+"distributor": "Mouser ElectronicsECIA (NEDA) Member  Authorized Distributor",
+"manufacturer": "Melexis Microelectronic Integrated Systems",
+"price": "1$1.970010$1.6800100$1.4300250$1.3400500$1.17001000$0.97003000$0.90306000$0.86909000$0.8360Show All",
+"stock": "8994"
+}
+],
+"websiteLink": "https://www.oemstrade.com/search/TH8056KDC-AAA-014-RE"
+}
+},
+"searchQuery": "TH8056KDC-AAA-014-RE"
+}
+
+Configuration
+
+Selectors for Scraping: Add CSS selectors for each distributor in config.py.
+
+Headers: Update USER_AGENTS in config.py for dynamic user-agent rotation.
+
+Error Handling: Set retries and timeouts in scraper.py.
+
+Technologies Used
+
+Python: Core programming language for scraping.
+
+BeautifulSoup: For HTML parsing and data extraction.
+
+Requests: To handle HTTP requests.
+
+Regex: For cleaning and filtering scraped data.
+
+JSON: To format and store output data.
+
+React Javascript: To dynamically render data using MUI in a readable and presentable format
+
+Contributing
+
+Contributions are welcome! Follow these steps to contribute:
+
+Fork the repository.
+
+Create a new branch:
+
+git checkout -b feature/YourFeatureName
+
+Commit your changes:
+
+git commit -m "Add a new scraping function"
+
+Push to the branch:
+
+git push origin feature/YourFeatureName
+
+Open a pull request.
+
+License
+
+Distributed under the MIT License. See LICENSE for more information.
+
+Contact
+
+Keitel Anana - keitelwinslet@gmail.com
+
+Project Link: https://github.com/kana140/component-scraper
