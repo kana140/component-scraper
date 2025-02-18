@@ -1,7 +1,3 @@
-.App {
-  /* text-align: center; */
-  /* color: white; */
-}
 html,
 body,
 .App,
@@ -21,10 +17,6 @@ body,
   padding: 15vh;
   position: relative;
 }
-/* 
-body {
-  background-color: #1f2937;
-} */
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -33,21 +25,12 @@ body {
 }
 
 .App-header {
-  /* margin-top: 10vh; */
-  /* display: flex;
-
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; */
   padding: 1%;
   padding-left: 4%;
-  /* background-color: #11243d; */
   background-image: linear-gradient(to bottom right, #003366, #11243d);
   font-size: calc(10px + 2vmin);
   color: #e5e7eb;
-  /* background-image: src(
-    "/Users/keitelanana/Projects/net-component-scraper/frontend/public/net.png"
-  ); */
+  font-weight: bold;
 }
 
 .App-link {
