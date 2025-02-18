@@ -42,7 +42,7 @@ export const ProductsTable = ({ products }) => {
     <Paper
       sx={{
         width: "100%",
-        backgroundColor: "#f7fff7",
+        // backgroundColor: "",
       }}
     >
       <DataGrid

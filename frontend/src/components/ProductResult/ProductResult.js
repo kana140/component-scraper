@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ProductsTable } from "../ProductsTable/ProductsTable";
+import "./ProductResult.css";
 
 export const ProductResult = ({ products, isLoading }) => {
   return (
@@ -24,19 +25,19 @@ export const ProductResult = ({ products, isLoading }) => {
             alignItems: "center",
           }}
         >
-          <CircularProgress sx={{ color: "#f08080", margin: "auto" }} />
+          <CircularProgress sx={{ color: "#1f2937", margin: "auto" }} />
         </Container>
       ) : products && Object.entries(products).length > 0 ? (
         <div className="search-table">
           {Object.entries(products).map(([siteName, siteData]) => (
             <Accordion key={siteName}>
-              <AccordionSummary>
+              <AccordionSummary sx={{ color: "#11243d" }}>
                 <Typography>
                   <a
                     href={siteData.websiteLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    sx={{ color: "#14B8A6" }}
+                    sx={{ color: "#e5e7eb" }}
                   >
                     {siteData.products.length} products found from {siteName}
                   </a>

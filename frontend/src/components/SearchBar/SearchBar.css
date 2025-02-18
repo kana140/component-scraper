@@ -2,13 +2,25 @@
   background-color: #f8fafc;
   /* padding: 2.5%; */
   margin: auto;
-  border-color: #f7fff7;
+  border-color: #1f2937;
   border-style: solid;
   border-width: 2px;
-  width: 60%;
-  margin-top: 4%;
-  margin-bottom: 4%;
+  width: 50%;
   font-size: 2em;
+  border-radius: 0px;
+  position: absolute;
+  left: 5%;
+  padding: 1%;
+}
+
+.search-button {
+  height: 100%;
+  /* position: absolute; */
+  /* right: 0; */
+  background-color: #003366;
+  color: #cbd2d9;
+  width: 15%;
+  font-size: 0.5em;
 }
 
 .text-area {
@@ -20,7 +32,7 @@
 
 .search-icon {
   margin-left: 1;
-  fill: #14b8a6;
+  fill: #003366;
 }
 
 .search-icon :hover {

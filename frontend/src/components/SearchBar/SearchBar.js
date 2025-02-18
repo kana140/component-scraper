@@ -30,9 +30,16 @@ export const SearchBar = ({
   return (
     <Box className="search-bar" display="flex" alignItems="center">
       <Box flex="1" display="flex" alignItems="center">
+        {/* <IconButton
+          type="submit"
+          aria-label="search"
+ 
+        > */}
+        <SearchIcon className="search-icon" fontSize="large" />
+        {/* </IconButton> */}
         <Input
           className="text-area"
-          placeholder="Enter SKU to search for products"
+          placeholder="Enter part number to search..."
           disableUnderline
           onInput={(e) => {
             setSearchQuery(e.target.value);
@@ -41,18 +48,18 @@ export const SearchBar = ({
             "& fieldset": { border: "none" },
           }}
         />
-        <IconButton
-          type="submit"
-          aria-label="search"
-          onClick={() => {
-            getSearchResult(searchQuery);
-            console.log("search clicked");
-            console.log(searchQuery);
-          }}
-        >
-          <SearchIcon className="search-icon" fontSize="large" />
-        </IconButton>
       </Box>
+      <button
+        className="search-button"
+        type="submit"
+        onClick={() => {
+          getSearchResult(searchQuery);
+          console.log("search clicked");
+          console.log(searchQuery);
+        }}
+      >
+        Search
+      </button>
     </Box>
   );
 };

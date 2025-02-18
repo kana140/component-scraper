@@ -5,3 +5,7 @@
 .search-table .a :hover {
   color: #86e3d6;
 }
+
+.search-result {
+  padding: 2%;
+}
