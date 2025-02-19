@@ -14,7 +14,7 @@ body,
 
 .background {
   background-image: url("../public/net.png");
-  padding: 15vh;
+  height: 40vh;
   position: relative;
 }
 
@@ -31,6 +31,7 @@ body,
   font-size: calc(10px + 2vmin);
   color: #e5e7eb;
   font-weight: bold;
+  border-bottom: solid black;
 }
 
 .App-link {

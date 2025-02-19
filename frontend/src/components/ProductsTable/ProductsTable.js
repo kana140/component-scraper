@@ -1,4 +1,10 @@
-import { Typography, Container, Paper, CircularProgress } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Paper,
+  CircularProgress,
+  Tooltip,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -61,7 +67,9 @@ export const ProductsTable = ({ products }) => {
             }}
           />
         ) : (
-          <LinkOffIcon />
+          <Tooltip title="No url available">
+            <LinkOffIcon />
+          </Tooltip>
         );
       },
     },
