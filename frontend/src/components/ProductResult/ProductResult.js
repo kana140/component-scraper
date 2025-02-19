@@ -5,9 +5,11 @@ import {
   AccordionSummary,
   CircularProgress,
   Typography,
+  Link,
 } from "@mui/material";
 import { ProductsTable } from "../ProductsTable/ProductsTable";
 import "./ProductResult.css";
+import LinkIcon from "@mui/icons-material/Link";
 
 export const ProductResult = ({ products, isLoading, searchQuery }) => {
   return (
@@ -42,7 +44,9 @@ export const ProductResult = ({ products, isLoading, searchQuery }) => {
                     rel="noopener noreferrer"
                     sx={{ color: "#003366" }}
                   >
-                    {siteData.products.length} products found from {siteName}
+                    {" "}
+                    <LinkIcon />
+                    {siteData.products.length} products found from {siteName}{" "}
                   </a>
                 </Typography>
               </AccordionSummary>
