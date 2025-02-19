@@ -1,10 +1,6 @@
 scraper python 3, beautiful soup
 scraper rotates user agents from USER_AGENTS in config.py file
 
-- connected to database
-- data saved with SKU/name of product and date it was scraped "TH8056KDC-AAA-014-RE_18-01-25"
-- every time search is made, check database if SKU is already in there and if the current date being searched is greater than the date of the data saved
-
 Component Scraper Website
 
 A modular web scraping tool designed for retrieving component information from various distributor websites, cleaning the data, and presenting it in a structured format.
