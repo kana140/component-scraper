@@ -4,6 +4,8 @@ import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
 import { Product } from "../Product/Product";
+import LinkIcon from "@mui/icons-material/Link";
+import LinkOffIcon from "@mui/icons-material/LinkOff";
 
 export const ProductsTable = ({ products }) => {
   const paginationModel = { page: 0, pageSize: 10 };
@@ -39,6 +41,30 @@ export const ProductsTable = ({ products }) => {
       flex: 1,
       type: "number",
     },
+    {
+      field: "link",
+      headerName: "Link",
+      sortable: false,
+      headerAlign: "center",
+      align: "center",
+      disableClickEventBubbling: true,
+      renderCell: (params) => {
+        const url = params.value;
+        return url ? (
+          <LinkIcon
+            sx={{ fontColor: "" }}
+            index={params.row.id}
+            onClick={() => {
+              if (url) {
+                window.open(url, "_blank", "noopener,noreferrer");
+              }
+            }}
+          />
+        ) : (
+          <LinkOffIcon />
+        );
+      },
+    },
   ];
   return (
     <Paper
@@ -59,12 +85,12 @@ export const ProductsTable = ({ products }) => {
           },
         }}
         getRowId={(row) => row.id}
-        onRowClick={(params) => {
-          const url = params.row.link;
-          if (url) {
-            window.open(url, "_blank", "noopener,noreferrer");
-          }
-        }}
+        // onRowClick={(params) => {
+        //   const url = params.row.link;
+        //   if (url) {
+        //     window.open(url, "_blank", "noopener,noreferrer");
+        //   }
+        // }}
       />
     </Paper>
   );
