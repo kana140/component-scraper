@@ -30,19 +30,20 @@ export const ProductsTable = ({ products }) => {
       headerName: "Price",
       headerAlign: "center",
       flex: 1,
+      type: "number",
     },
     {
       field: "stock",
       headerName: "Stock",
       headerAlign: "center",
       flex: 1,
+      type: "number",
     },
   ];
   return (
     <Paper
       sx={{
         width: "100%",
-        // backgroundColor: "",
       }}
     >
       <DataGrid
