@@ -13,6 +13,7 @@ db = client.netComponents_db
 netComponents = db.netComponents """
 
 def run_scraper(searchQuery):
+    searchQuery = searchQuery.strip()
     isAlreadyInDB = check_in_db(searchQuery)
     if (isAlreadyInDB == True):
         get_from_db(searchQuery)

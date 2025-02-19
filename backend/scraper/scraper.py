@@ -52,6 +52,15 @@ def clean_data(data):
             part["stock"] = re.sub(r'\D', '', stock)
         if int(part["stock"]) != 0: 
             filteredData.append(part)
+        #makes sure price has $ in front of it 
+        if "price" in part:
+            price = part["price"]
+            if price != "":
+                if price[0] != "$":
+                    if price[0].isnumeric():
+                        part["price"] = "$" + price
+                    else:
+                        part["price"] = "$" + price[1:]
     data[dictKey] = filteredData
     return data
 
@@ -63,10 +72,18 @@ def scrape_oemtrade(data):
         offers = part.find_all("tr", class_="row")
         if (len(offers) != 0):
             for offer in offers:
-                distributor = part.find('h2', class_='distributor-title').get_text(strip=True)
+                # distributor = part.find('h2', class_='distributor-title').get_text(strip=True)
+                h2Tag = part.find('h2', class_='distributor-title')
+                #if nested span in distributor h2
+                for span in h2Tag.find_all('span'):
+                    span.decompose()
+                distributor = h2Tag.get_text(strip=True)
                 manufacturer = offer.find('td', class_='td-distributor-name').get_text(strip=True)
                 stock = offer.find('td', class_='td-stock').get_text(strip=True)
-                price = offer.find('td', class_="td-price").get_text(strip=True)
+                priceCell = offer.find('td', class_='td-price')
+                price = ""
+                if len(priceCell.find_all()) > 0:
+                    price = priceCell.find('ul', class_='table-list').findChildren('li', class_='multi-price', recursive=False)[-1].find('span', class_='list-right').get_text(strip=True)
                 jsonResult.append({
                 "distributor": distributor,
                 "manufacturer": manufacturer,
@@ -100,8 +117,6 @@ def scrape_octopart(data):
     octopartJSON["Octopart.com"] = jsonResult
     return octopartJSON
 
-
-
 def scrape_icsource(data):
     jsonResult = []
     partElems = data.find_all('tr', class_='rgRow')
@@ -118,22 +133,34 @@ def scrape_icsource(data):
     return icsourceJSON
 
 def scrape_findchips(data):
-    rowElems = data.find_all('tr', class_='row')
+    # offers = data.find_all('tr', class_='row')
+    offers = data.find_all('div', class_='distributor-results')
     jsonResult = []
-    for i in rowElems:
-        manufacturer = i.select('td.td-mfg')[0].get_text(strip=True)
-        stock = i.select('td.td-stock')[0].get_text(strip=True)
-        price = i.select('td.td-price-range')[0].get_text(strip=True)
-        jsonResult.append({
-        "manufacturer": manufacturer,
-        "stock": stock,
-        "price": price
-        })
+    for offer in offers:
+        parts = offer.find_all('tr', class_='row')
+        h2Tag = offer.find('h2', class_='distributor-title')
+        #if nested span in distributor h2
+        for span in h2Tag.find_all('span'):
+            span.decompose()
+        distributor = h2Tag.get_text(strip=True)
+        if len(parts) != 0:
+            for part in parts:
+                manufacturer = part.select('td.td-mfg')[0].get_text(strip=True)
+                stock = part.select('td.td-stock')[0].get_text(strip=True)
+                price = part.select('td.td-price-range')[0].get_text(strip=True)
+                if price != "":
+                    priceRange = price.split('/')
+                    lowestPrice = priceRange[0]
+                    price = lowestPrice
+                jsonResult.append({
+                "manufacturer": manufacturer,
+                "stock": stock,
+                "price": price,
+                "distributor": distributor
+                })
     findChipsJSON = {}
     findChipsJSON["Findchips.com"] = jsonResult
     return findChipsJSON
-
-
 
 def send_email(subject, body):
     for recipient in EMAILS:
