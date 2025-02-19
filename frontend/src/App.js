@@ -20,12 +20,14 @@ function App() {
             color: "white",
             position: "absolute",
             bottom: "50%",
-            left: "50%",
+            left: "25%",
             fontWeight: "bold",
+            textAlign: "center",
           }}
         >
           {" "}
-          find
+          Scrapes data from major electronic component websites including
+          FindChips, OctoPart, OemsTrade and ICSource.
         </div>
         <SearchBar
           searchQuery={searchQuery}
