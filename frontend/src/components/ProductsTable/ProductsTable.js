@@ -52,7 +52,7 @@ export const ProductsTable = ({ products }) => {
         const url = params.value;
         return url ? (
           <LinkIcon
-            sx={{ fontColor: "" }}
+            sx={{ color: "#003366", cursor: "pointer" }}
             index={params.row.id}
             onClick={() => {
               if (url) {
