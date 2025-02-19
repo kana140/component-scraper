@@ -50,8 +50,11 @@ def clean_data(data):
         stock = part["stock"]
         if stock.isnumeric() != True:
             part["stock"] = re.sub(r'\D', '', stock)
-        if int(part["stock"]) != 0: 
-            filteredData.append(part)
+        try:
+            if int(part["stock"]) != 0: 
+                filteredData.append(part)
+        except:
+            print("exception occured with: " + part)
         #makes sure price has $ in front of it 
         if "price" in part:
             price = part["price"]
