@@ -54,7 +54,7 @@ def clean_data(data):
             if int(part["stock"]) != 0: 
                 filteredData.append(part)
         except:
-            print("exception occured with: " + part)
+            print("exception occured with: ", part)
         #makes sure price has $ in front of it 
         if "price" in part:
             price = part["price"]
