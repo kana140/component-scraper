@@ -15,6 +15,18 @@ function App() {
     <div className="App">
       <div className="App-header">Forseti</div>
       <div className="background">
+        <div
+          style={{
+            color: "white",
+            position: "absolute",
+            bottom: "50%",
+            left: "50%",
+            fontWeight: "bold",
+          }}
+        >
+          {" "}
+          find
+        </div>
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -28,6 +40,7 @@ function App() {
       <ProductResult
         products={searchResult}
         isLoading={isLoading}
+        searchQuery={searchQuery}
       ></ProductResult>
     </div>
   );

@@ -1,6 +1,5 @@
 .search-bar {
   background-color: #f8fafc;
-  /* padding: 2.5%; */
   margin: auto;
   border-color: #1f2937;
   border-style: solid;
@@ -9,25 +8,33 @@
   font-size: 2em;
   border-radius: 0px;
   position: absolute;
-  left: 5%;
+  /* left: 5%; */
   padding: 1%;
+  bottom: 20%;
+  transition-duration: 1s;
+  left: 25%;
+}
+
+.search-bar.animate {
+  left: 5%;
+  animation: slidein 0.5s forwards;
 }
 
 .search-button {
   height: 100%;
-  /* position: absolute; */
-  /* right: 0; */
   background-color: #003366;
   color: #cbd2d9;
   width: 15%;
   font-size: 0.5em;
+  padding: 1%;
+  background-image: linear-gradient(to bottom right, #003366, #11243d);
 }
 
 .text-area {
   width: 100%;
   height: 100%;
   border-radius: 5px;
-  color: #86e3d6;
+  color: #003366;
 }
 
 .search-icon {

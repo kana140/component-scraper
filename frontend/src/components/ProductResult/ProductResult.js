@@ -9,7 +9,7 @@ import {
 import { ProductsTable } from "../ProductsTable/ProductsTable";
 import "./ProductResult.css";
 
-export const ProductResult = ({ products, isLoading }) => {
+export const ProductResult = ({ products, isLoading, searchQuery }) => {
   return (
     <Container
       className="search-result"
@@ -29,6 +29,9 @@ export const ProductResult = ({ products, isLoading }) => {
         </Container>
       ) : products && Object.entries(products).length > 0 ? (
         <div className="search-table">
+          <h3 style={{ textAlign: "center" }}>
+            Search Results for {searchQuery}
+          </h3>
           {Object.entries(products).map(([siteName, siteData]) => (
             <Accordion key={siteName}>
               <AccordionSummary sx={{ color: "#11243d" }}>
